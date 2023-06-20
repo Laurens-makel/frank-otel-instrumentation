@@ -23,7 +23,7 @@ public class FrankInstrumentation implements TypeInstrumentation {
 
     @Override
     public ElementMatcher<TypeDescription> typeMatcher() {
-        return implementsInterface(named("nl.nn.adapterframework.processors.PipeProcessor"));
+        return named("nl.nn.adapterframework.processors.InputOutputPipeProcessor");
     }
 
     @Override
@@ -33,10 +33,10 @@ public class FrankInstrumentation implements TypeInstrumentation {
                         .and(named("processPipe"))
                         .and(not(isAbstract()))
                         .and(takesArguments(4))
-                        .and(takesArgument(0, named("nl.nn.adapterframework.core.PipeLineSession")))
+                        .and(takesArgument(0, named("nl.nn.adapterframework.core.PipeLine")))
                         .and(takesArgument(1, named("nl.nn.adapterframework.core.IPipe")))
                         .and(takesArgument(2, named("nl.nn.adapterframework.stream.Message")))
-                        .and(takesArgument(3, named("nl.nn.adapterframework.core.PipeLine")))
+                        .and(takesArgument(3, named("nl.nn.adapterframework.core.PipeLineSession")))
 
                 ,this.getClass().getName() + "$PipeExecutionAdvice");
     }
@@ -45,10 +45,10 @@ public class FrankInstrumentation implements TypeInstrumentation {
     public static class PipeExecutionAdvice {
         @Advice.OnMethodEnter(suppress = Throwable.class)
         public static void methodEnter(
-                @Advice.Argument(0) PipeLineSession session,
-                @Advice.Argument(1) IPipe pipe,
+                @Advice.Argument(3) PipeLineSession session,
                 @Advice.Argument(2) Message message,
-                @Advice.Argument(3) PipeLine pipeLine,
+                @Advice.Argument(1) IPipe pipe,
+                @Advice.Argument(0) PipeLine pipeLine,
                 @Advice.Local("otelRequest") FrankPipeRequest otelRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
@@ -66,10 +66,10 @@ public class FrankInstrumentation implements TypeInstrumentation {
 
         @Advice.OnMethodExit(onThrowable = Throwable.class, suppress = Throwable.class)
         public static void methodExit(
-                @Advice.Argument(0) PipeLineSession session,
-                @Advice.Argument(1) IPipe pipe,
+                @Advice.Argument(3) PipeLineSession session,
                 @Advice.Argument(2) Message message,
-                @Advice.Argument(3) PipeLine pipeLine,
+                @Advice.Argument(1) IPipe pipe,
+                @Advice.Argument(0) PipeLine pipeLine,
                 @Advice.Return PipeRunResult result,
                 @Advice.Thrown Throwable throwable,
                 @Advice.Local("otelRequest") FrankPipeRequest otelRequest,
