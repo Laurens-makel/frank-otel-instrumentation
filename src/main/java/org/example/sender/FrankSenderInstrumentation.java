@@ -45,7 +45,7 @@ public class FrankSenderInstrumentation implements TypeInstrumentation {
             Context parentContext = currentContext();
 
             System.out.println("SENDER EXECUTION ADVICE!");
-            otelRequest = new FrankSenderRequest(null, message, session);
+            otelRequest = new FrankSenderRequest(message, session, null);
 
             if (!instrumenter().shouldStart(parentContext, otelRequest)) {
                 return;

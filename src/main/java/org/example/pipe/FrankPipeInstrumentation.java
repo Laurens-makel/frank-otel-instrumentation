@@ -52,7 +52,7 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
             Context parentContext = currentContext();
 
             System.out.println("PIPE EXECUTION ADVICE!");
-            otelRequest = new FrankPipeRequest(pipe, message, session);
+            otelRequest = new FrankPipeRequest(message, session, pipe);
 
             if (!instrumenter().shouldStart(parentContext, otelRequest)) {
                 return;
