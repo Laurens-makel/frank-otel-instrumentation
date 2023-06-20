@@ -1,10 +1,10 @@
-package org.example.extractors;
+package org.example.pipe.extractors;
 
 import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.instrumentation.api.instrumenter.AttributesExtractor;
 import nl.nn.adapterframework.core.PipeRunResult;
-import org.example.FrankPipeRequest;
+import org.example.pipe.FrankPipeRequest;
 
 import javax.annotation.Nullable;
 

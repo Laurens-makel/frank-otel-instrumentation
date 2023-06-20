@@ -1,7 +1,7 @@
-package org.example.extractors;
+package org.example.pipe.extractors;
 
 import io.opentelemetry.instrumentation.api.instrumenter.SpanNameExtractor;
-import org.example.FrankPipeRequest;
+import org.example.pipe.FrankPipeRequest;
 
 public class FrankPipeSpanNameExtractor implements SpanNameExtractor<FrankPipeRequest> {
 

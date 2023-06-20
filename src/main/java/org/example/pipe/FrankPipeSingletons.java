@@ -1,14 +1,14 @@
-package org.example;
+package org.example.pipe;
 
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.instrumentation.api.instrumenter.Instrumenter;
 import nl.nn.adapterframework.core.PipeRunResult;
-import org.example.extractors.FrankPipeAttributeExtractor;
-import org.example.extractors.FrankPipeSpanNameExtractor;
-import org.example.extractors.FrankPipeStatusExtractor;
+import org.example.pipe.extractors.FrankPipeAttributeExtractor;
+import org.example.pipe.extractors.FrankPipeSpanNameExtractor;
+import org.example.pipe.extractors.FrankPipeStatusExtractor;
 
-public class FrankSingletons {
-    private static final String INSTRUMENTATION_NAME = "io.opentelemetry.apache-httpclient-4.0";
+public class FrankPipeSingletons {
+    private static final String INSTRUMENTATION_NAME = "frank-framework-pipes-instrumentation";
     private static final Instrumenter<FrankPipeRequest, PipeRunResult> INSTRUMENTER;
 
     static {

@@ -1,5 +1,7 @@
-package org.example;
+package org.example.pipe;
 
+import io.opentelemetry.context.Context;
+import io.opentelemetry.context.Scope;
 import io.opentelemetry.javaagent.extension.instrumentation.TypeInstrumentation;
 import io.opentelemetry.javaagent.extension.instrumentation.TypeTransformer;
 import net.bytebuddy.asm.Advice;
@@ -11,15 +13,11 @@ import nl.nn.adapterframework.core.PipeLineSession;
 import nl.nn.adapterframework.core.PipeRunResult;
 import nl.nn.adapterframework.stream.Message;
 
-import io.opentelemetry.context.Context;
-import io.opentelemetry.context.Scope;
-
 import static io.opentelemetry.javaagent.bootstrap.Java8BytecodeBridge.currentContext;
-import static io.opentelemetry.javaagent.extension.matcher.AgentElementMatchers.implementsInterface;
 import static net.bytebuddy.matcher.ElementMatchers.*;
-import static org.example.FrankSingletons.instrumenter;
+import static org.example.pipe.FrankPipeSingletons.instrumenter;
 
-public class FrankInstrumentation implements TypeInstrumentation {
+public class FrankPipeInstrumentation implements TypeInstrumentation {
 
     @Override
     public ElementMatcher<TypeDescription> typeMatcher() {
@@ -37,7 +35,6 @@ public class FrankInstrumentation implements TypeInstrumentation {
                         .and(takesArgument(1, named("nl.nn.adapterframework.core.IPipe")))
                         .and(takesArgument(2, named("nl.nn.adapterframework.stream.Message")))
                         .and(takesArgument(3, named("nl.nn.adapterframework.core.PipeLineSession")))
-
                 ,this.getClass().getName() + "$PipeExecutionAdvice");
     }
 
@@ -54,6 +51,7 @@ public class FrankInstrumentation implements TypeInstrumentation {
                 @Advice.Local("otelScope") Scope scope) {
             Context parentContext = currentContext();
 
+            System.out.println("PIPE EXECUTION ADVICE!");
             otelRequest = new FrankPipeRequest(pipe, message, session);
 
             if (!instrumenter().shouldStart(parentContext, otelRequest)) {

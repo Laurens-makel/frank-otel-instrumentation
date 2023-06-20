@@ -1,4 +1,4 @@
-package org.example;
+package org.example.pipe;
 
 import nl.nn.adapterframework.core.IPipe;
 import nl.nn.adapterframework.core.PipeLineSession;
