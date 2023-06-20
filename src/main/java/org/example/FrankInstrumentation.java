@@ -66,8 +66,10 @@ public class FrankInstrumentation implements TypeInstrumentation {
 
         @Advice.OnMethodExit(onThrowable = Throwable.class, suppress = Throwable.class)
         public static void methodExit(
-                @Advice.Argument(0) Message message,
-                @Advice.Argument(1) PipeLineSession session,
+                @Advice.Argument(0) PipeLineSession session,
+                @Advice.Argument(1) IPipe pipe,
+                @Advice.Argument(2) Message message,
+                @Advice.Argument(3) PipeLine pipeLine,
                 @Advice.Return PipeRunResult result,
                 @Advice.Thrown Throwable throwable,
                 @Advice.Local("otelRequest") FrankPipeRequest otelRequest,
