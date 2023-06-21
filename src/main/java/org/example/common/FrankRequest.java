@@ -5,7 +5,6 @@ import nl.nn.adapterframework.core.PipeLineSession;
 import nl.nn.adapterframework.stream.Message;
 
 public abstract class FrankRequest<T extends INamedObject> {
-
     protected final Message message;
     protected final PipeLineSession session;
     protected final T frankComponent;
