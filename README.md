@@ -2,7 +2,7 @@
 
 ![frank-otel-instrumentation-example](simple-example.png)
 
-Provides instrumentation modules for the OpenTelemetry Agent to instrument a Frank Framework instance.
+Provides instrumentation modules for the [OpenTelemetry Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation) to instrument a [Frank Framework](https://github.com/ibissource/iaf) instance.
 
 # Demo
 
