@@ -3,9 +3,8 @@ package org.example.pipe;
 import com.google.auto.service.AutoService;
 import io.opentelemetry.javaagent.extension.instrumentation.InstrumentationModule;
 import io.opentelemetry.javaagent.extension.instrumentation.TypeInstrumentation;
-import org.example.pipe.extractors.FrankPipeAttributeExtractor;
-import org.example.pipe.extractors.FrankPipeSpanNameExtractor;
-import org.example.pipe.extractors.FrankPipeStatusExtractor;
+import org.example.common.FrankExtractor;
+import org.example.common.FrankRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +27,8 @@ public class FrankPipeInstrumentationModule extends InstrumentationModule {
         List<String> helpers = new ArrayList<>();
         helpers.add(FrankPipeSingletons.class.getName());
         helpers.add(FrankPipeRequest.class.getName());
-        helpers.add(FrankPipeAttributeExtractor.class.getName());
-        helpers.add(FrankPipeSpanNameExtractor.class.getName());
-        helpers.add(FrankPipeStatusExtractor.class.getName());
+        helpers.add(FrankExtractor.class.getName());
+        helpers.add(FrankRequest.class.getName());
         return helpers;
     }
 }

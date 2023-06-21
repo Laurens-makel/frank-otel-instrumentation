@@ -39,13 +39,14 @@ public class FrankSenderInstrumentation implements TypeInstrumentation {
         public static void methodEnter(
                 @Advice.Argument(1) PipeLineSession session,
                 @Advice.Argument(0) Message message,
+                @Advice.This ISender sender,
                 @Advice.Local("otelRequest") FrankSenderRequest otelRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
             Context parentContext = currentContext();
 
             System.out.println("SENDER EXECUTION ADVICE!");
-            otelRequest = new FrankSenderRequest(message, session, null);
+            otelRequest = new FrankSenderRequest(message, session, sender);
 
             if (!instrumenter().shouldStart(parentContext, otelRequest)) {
                 return;

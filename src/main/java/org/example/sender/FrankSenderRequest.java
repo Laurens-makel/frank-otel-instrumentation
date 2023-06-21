@@ -7,8 +7,8 @@ import nl.nn.adapterframework.stream.Message;
 import org.example.common.FrankRequest;
 
 public class FrankSenderRequest extends FrankRequest<ISender> {
-
     public FrankSenderRequest(Message message, PipeLineSession session, ISender frankComponent) {
         super(message, session, frankComponent);
     }
+
 }
