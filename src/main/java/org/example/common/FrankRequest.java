@@ -5,6 +5,8 @@ import nl.nn.adapterframework.core.PipeLineSession;
 import nl.nn.adapterframework.stream.Message;
 
 public abstract class FrankRequest<T extends INamedObject> {
+
+    public final static String SPAN_CONTEXT_SESSION_KEY = "FrankInstrumentation.CurrentContext";
     protected final Message message;
     protected final PipeLineSession session;
     protected final T frankComponent;

@@ -60,6 +60,11 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
 
             context = instrumenter().start(parentContext, otelRequest);
             scope = context.makeCurrent();
+
+            String contextPropagationKey = otelRequest.getContextPropagationKey();
+            if(contextPropagationKey != null){
+                session.put(contextPropagationKey, context);
+            }
         }
 
         @Advice.OnMethodExit(onThrowable = Throwable.class, suppress = Throwable.class)

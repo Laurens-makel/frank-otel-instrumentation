@@ -9,6 +9,8 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import nl.nn.adapterframework.core.*;
 import nl.nn.adapterframework.stream.Message;
+import org.example.common.FrankRequest;
+
 
 import static io.opentelemetry.javaagent.bootstrap.Java8BytecodeBridge.currentContext;
 import static io.opentelemetry.javaagent.extension.matcher.AgentElementMatchers.implementsInterface;
@@ -16,6 +18,7 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
 import static org.example.sender.FrankSenderSingletons.instrumenter;
 
 public class FrankSenderInstrumentation implements TypeInstrumentation {
+
 
     @Override
     public ElementMatcher<TypeDescription> typeMatcher() {
@@ -43,7 +46,12 @@ public class FrankSenderInstrumentation implements TypeInstrumentation {
                 @Advice.Local("otelRequest") FrankSenderRequest otelRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
-            Context parentContext = currentContext();
+            boolean useSessionContext = session.containsKey(FrankRequest.SPAN_CONTEXT_SESSION_KEY+sender.getName());
+            System.out.println("Sender methodEnter(), found parentContext in session ["+useSessionContext+"] ");
+            Context parentContext = useSessionContext
+                    ? (Context) session.get(FrankRequest.SPAN_CONTEXT_SESSION_KEY+sender.getName())
+                    : currentContext();
+
 
             System.out.println("SENDER EXECUTION ADVICE!");
             otelRequest = new FrankSenderRequest(message, session, sender);
