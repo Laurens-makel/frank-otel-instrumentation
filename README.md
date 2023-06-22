@@ -22,15 +22,37 @@ If you have any feedback, ideas or found any issues, please let us know by creat
 
 The Frank OTEL Instrumentation modules provide the following configurable options:
 
+### Enable/disable exit events
+If true, whenever an exit is taken, an event will be added to the current span.
+
+##### Property
+- frank.instrumentation.exits=`true|false`
+- default: `true`
+
+##### Example Usage
+To disable this feature, add the following JVM property:
+- -Dfrank.instrumentation.exits=false
+
 
 ### Enable/disable parameter events
 If true, whenever a parameter value is resolved, an event will be added to the current span.
 ![frank-otel-instrumentation-parameter-option-example](zipkin-param-event.png)
 
 ##### Property
-- frank.instrument.parameters=`true|false` 
+- frank.instrumentation.parameters=`true|false` 
 - default: `true`
 
 ##### Example Usage
 To disable this feature, add the following JVM property:
-- -Dfrank.instrument.parameters=false
+- -Dfrank.instrumentation.parameters=false
+
+### Enable/disable IteratorPipe parallel context propagation
+If true, context is propagated when an IteratorPipe is configured to work in parallel.
+
+##### Property
+- frank.instrumentation.parallel.iterator.propagation=`true|false`
+- default: `true`
+
+##### Example Usage
+To disable this feature, add the following JVM property:
+- -Dfrank.instrumentation.parallel.iterator.propagation=false
