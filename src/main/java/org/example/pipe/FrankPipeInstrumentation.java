@@ -60,6 +60,11 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
 
             context = instrumenter().start(parentContext, otelRequest);
             scope = context.makeCurrent();
+
+            // in certain situations, a pipe should manually propagate the tracing context to its children
+            if(otelRequest.shouldPropagate()){
+                session.put(otelRequest.getContextPropagationKey(), context);
+            }
         }
 
         @Advice.OnMethodExit(onThrowable = Throwable.class, suppress = Throwable.class)
@@ -82,6 +87,11 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
                 instrumenter().end(context, otelRequest, null, throwable);
             } else {
                 instrumenter().end(context, otelRequest, result, null);
+            }
+
+            // remove context from session again, since it's not relevant anymore
+            if(otelRequest.shouldPropagate()){
+                session.remove(otelRequest.getContextPropagationKey());
             }
         }
     }

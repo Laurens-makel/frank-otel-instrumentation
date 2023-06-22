@@ -8,6 +8,7 @@ import org.example.common.FrankExtractor;
 import org.example.common.FrankRequest;
 
 public class FrankSenderSingletons {
+
     private static final String INSTRUMENTATION_NAME = "io.opentelemetry.apache-httpclient-4.0";
     private static final Instrumenter<FrankSenderRequest, Message> INSTRUMENTER;
 
@@ -19,7 +20,7 @@ public class FrankSenderSingletons {
                         )
                         .setSpanStatusExtractor(new FrankExtractor<FrankRequest<ISender>, Message>())
                         .addAttributesExtractor(new FrankExtractor<FrankRequest<ISender>, Message>())
-                        .buildClientInstrumenter(FrankSenderRequest::setSessionKey);
+                        .buildInstrumenter();
     }
 
     public static Instrumenter<FrankSenderRequest, Message> instrumenter() {
