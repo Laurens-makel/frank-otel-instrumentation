@@ -34,3 +34,14 @@ If true, whenever a parameter value is resolved, an event will be added to the c
 ##### Example Usage
 To disable this feature, add the following JVM property:
 - -Dfrank.instrument.parameters=false
+
+### Enable/disable IteratorPipe parallel context propagation
+If true, context is propagated when an IteratorPipe is configured to work in parallel.
+
+##### Property
+- frank.instrumentation.parallel.iterator.propagation=`true|false`
+- default: `true`
+
+##### Example Usage
+To disable this feature, add the following JVM property:
+- -Dfrank.instrumentation.parallel.iterator.propagation=false

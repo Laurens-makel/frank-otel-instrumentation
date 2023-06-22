@@ -9,6 +9,7 @@ import org.example.common.FrankRequest;
 public class FrankPipeRequest extends FrankRequest<IPipe> {
 
     private final String contextPropagationKey;
+    private final boolean isParallelContextPropagation = Boolean.parseBoolean(System.getProperty("frank.instrumentation.parallel.iterator.propagation", "true"));
 
     public FrankPipeRequest(Message message, PipeLineSession session, IPipe frankComponent) {
         super(message, session, frankComponent);
@@ -26,7 +27,7 @@ public class FrankPipeRequest extends FrankRequest<IPipe> {
 
     private String detectContextPropagationKey(){
         // IteratingPipes with 'parallel' set to 'true' spawn child threads
-        if(frankComponent instanceof IteratingPipe){
+        if(isParallelContextPropagation && frankComponent instanceof IteratingPipe){
             IteratingPipe iteratingPipe = ((IteratingPipe) frankComponent);
             if(iteratingPipe.isParallel()){
                 return FrankRequest.SPAN_CONTEXT_SESSION_KEY+iteratingPipe.getSender().getName();
