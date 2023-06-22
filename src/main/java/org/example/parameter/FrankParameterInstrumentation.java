@@ -67,14 +67,10 @@ public class FrankParameterInstrumentation implements TypeInstrumentation {
                 @Advice.Local("otelRequest") FrankParameterRequest otelRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
-            if (scope == null) {
-                return;
-            }
-
             Attributes attributes = Attributes.builder()
-                    .put("Name",  parameter.getName())
-                    .put("Value", result.toString())
+                    .put(parameter.getName(), result.toString())
                     .build();
+            System.out.println("PARAMETER RESOLVED!");
 
             Span.current().addEvent("Parameter Resolved", attributes);
         }
