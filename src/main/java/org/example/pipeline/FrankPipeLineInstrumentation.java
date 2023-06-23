@@ -1,5 +1,6 @@
 package org.example.pipeline;
 
+import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.javaagent.extension.instrumentation.TypeInstrumentation;
@@ -15,7 +16,7 @@ import nl.nn.adapterframework.stream.Message;
 import static io.opentelemetry.javaagent.bootstrap.Java8BytecodeBridge.currentContext;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
-import static org.example.pipeline.FrankPipeLineSingletons.instrumenter;
+import static org.example.pipeline.FrankPipeLineSingletons.*;
 
 public class FrankPipeLineInstrumentation implements TypeInstrumentation {
 
@@ -42,6 +43,7 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
 
     @SuppressWarnings("unused")
     public static class PipeLineExecutionAdvice {
+
         @Advice.OnMethodEnter(suppress = Throwable.class)
         public static void methodEnter(
                 @Advice.Argument(4) String firstPipe,
@@ -79,6 +81,15 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
                 @Advice.Local("otelScope") Scope scope) {
             if (scope == null) {
                 return;
+            }
+            System.out.println("EXIT ADVICE!");
+
+            if(INSTRUMENT_EXITS){
+                Span current = Span.current();
+                current.setAttribute(FRANK_EXIT_STATE_KEY, result.getState().name());
+                if(result.getExitCode()>0){
+                    current.setAttribute(FRANK_EXIT_CODE_KEY, result.getExitCode());
+                }
             }
 
             scope.close();

@@ -22,15 +22,44 @@ If you have any feedback, ideas or found any issues, please let us know by creat
 
 The Frank OTEL Instrumentation modules provide the following configurable options:
 
+### Enable/disable exit tags
+If true, whenever an exit is taken, a tag will be added to the current span.
+![frank-otel-instrumentation-exit-option-example](zipkin-exit-tag.png)
+
+##### Property
+- frank.instrumentation.exits=`true|false`
+- default: `true`
+
+##### Example Usage
+To disable this feature, add the following JVM property:
+- -Dfrank.instrumentation.exits=false
+
 
 ### Enable/disable parameter events
 If true, whenever a parameter value is resolved, an event will be added to the current span.
 ![frank-otel-instrumentation-parameter-option-example](zipkin-param-event.png)
 
 ##### Property
-- frank.instrument.parameters=`true|false` 
+- frank.instrumentation.parameters=`true|false` 
 - default: `true`
 
 ##### Example Usage
 To disable this feature, add the following JVM property:
-- -Dfrank.instrument.parameters=false
+- -Dfrank.instrumentation.parameters=false
+
+### Enable/disable IteratorPipe parallel context propagation
+If true, context is propagated when an IteratorPipe is configured to work in parallel.
+
+##### Property
+- frank.instrumentation.parallel.iterator.propagation=`true|false`
+- default: `true`
+
+##### Example Usage
+To disable this feature, add the following JVM property:
+- -Dfrank.instrumentation.parallel.iterator.propagation=false
+
+# Useful info
+
+- https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/docs/contributing/writing-instrumentation-module.md#write-an-instrumentationmodule-step-by-step
+- The OpenTelemetry Java agent loads Advice classes inside of its own isolated `AgentClassLoader`, but the Advice method bytecode is inlined into the instrumented application classes.
+- Application classes do not have access to the `AgentClassLoader`.

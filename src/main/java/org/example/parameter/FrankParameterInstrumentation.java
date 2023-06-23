@@ -27,7 +27,7 @@ public class FrankParameterInstrumentation implements TypeInstrumentation {
 
     @Override
     public void transform(TypeTransformer transformer) {
-        if(System.getProperty("frank.instrument.parameters", "true").equals("true")){
+        if(System.getProperty("frank.instrumentation.parameters", "true").equals("true")){
             transformer.applyAdviceToMethod(
                     isMethod()
                             .and(named("getValue"))
