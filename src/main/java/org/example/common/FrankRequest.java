@@ -3,6 +3,7 @@ package org.example.common;
 import nl.nn.adapterframework.core.INamedObject;
 import nl.nn.adapterframework.core.PipeLineSession;
 import nl.nn.adapterframework.stream.Message;
+import org.apache.commons.lang3.StringUtils;
 
 public abstract class FrankRequest<T extends INamedObject> {
 
@@ -21,7 +22,7 @@ public abstract class FrankRequest<T extends INamedObject> {
         return frankComponent.getName();
     }
     public String getFrankElementType(){
-        return frankComponent.getClass().getSimpleName();
+        return StringUtils.substringBefore(frankComponent.getClass().getSimpleName(), "$$EnhancerBySpring");
     }
 
     public void setSessionKey(String key, String value){
