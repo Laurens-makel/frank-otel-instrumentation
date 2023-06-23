@@ -84,7 +84,7 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
             }
             System.out.println("EXIT ADVICE!");
 
-            if(INSTRUMENT_EXITS){
+            if(TAG_EXITS){
                 Span current = Span.current();
                 current.setAttribute(FRANK_EXIT_STATE_KEY, result.getState().name());
                 if(result.getExitCode()>0){

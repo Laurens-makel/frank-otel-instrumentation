@@ -5,9 +5,6 @@ import io.opentelemetry.javaagent.extension.instrumentation.InstrumentationModul
 import io.opentelemetry.javaagent.extension.instrumentation.TypeInstrumentation;
 import org.example.common.FrankExtractor;
 import org.example.common.FrankRequest;
-import org.example.pipe.FrankPipeInstrumentation;
-import org.example.pipe.FrankPipeRequest;
-import org.example.pipe.FrankPipeSingletons;
 
 import java.util.ArrayList;
 import java.util.List;

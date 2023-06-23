@@ -34,6 +34,17 @@ If true, whenever an exit is taken, a tag will be added to the current span.
 To disable this feature, add the following JVM property:
 - -Dfrank.instrumentation.exits=false
 
+### Enable/disable forward tags
+If true, whenever a forward is taken, a tag will be added to the current span.
+![frank-otel-instrumentation-forward-option-example](zipkin-forward-tag.png)
+
+##### Property
+- frank.instrumentation.forwards=`true|false`
+- default: `true`
+
+##### Example Usage
+To disable this feature, add the following JVM property:
+- -Dfrank.instrumentation.forwards=false
 
 ### Enable/disable parameter events
 If true, whenever a parameter value is resolved, an event will be added to the current span.
