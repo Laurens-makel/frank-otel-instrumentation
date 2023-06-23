@@ -14,6 +14,10 @@ public class FrankPipeLineSingletons {
     private static final String INSTRUMENTATION_NAME = "frank-framework-pipes-instrumentation";
     private static final Instrumenter<FrankPipeLineRequest, PipeLineResult> INSTRUMENTER;
 
+    public static final String FRANK_EXIT_STATE_KEY = "frank.exit.state";
+    public static final String FRANK_EXIT_CODE_KEY = "frank.exit.code";
+    public static boolean INSTRUMENT_EXITS = Boolean.parseBoolean(System.getProperty("frank.instrumentation.exits", "true"));
+
     static {
         INSTRUMENTER = Instrumenter.<FrankPipeLineRequest, PipeLineResult> builder(
                                 GlobalOpenTelemetry.get(),

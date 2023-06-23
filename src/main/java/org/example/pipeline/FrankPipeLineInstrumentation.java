@@ -1,14 +1,10 @@
 package org.example.pipeline;
 
-import io.opentelemetry.api.common.Attributes;
-import io.opentelemetry.api.common.AttributesBuilder;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.javaagent.extension.instrumentation.TypeInstrumentation;
 import io.opentelemetry.javaagent.extension.instrumentation.TypeTransformer;
-import liquibase.pro.packaged.B;
-import liquibase.pro.packaged.S;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -16,12 +12,11 @@ import nl.nn.adapterframework.core.PipeLine;
 import nl.nn.adapterframework.core.PipeLineResult;
 import nl.nn.adapterframework.core.PipeLineSession;
 import nl.nn.adapterframework.stream.Message;
-import org.apache.xpath.operations.Bool;
 
 import static io.opentelemetry.javaagent.bootstrap.Java8BytecodeBridge.currentContext;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
-import static org.example.pipeline.FrankPipeLineSingletons.instrumenter;
+import static org.example.pipeline.FrankPipeLineSingletons.*;
 
 public class FrankPipeLineInstrumentation implements TypeInstrumentation {
 
@@ -48,8 +43,6 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
 
     @SuppressWarnings("unused")
     public static class PipeLineExecutionAdvice {
-
-        private static boolean instrumentExits = Boolean.parseBoolean(System.getProperty("frank.instrumentation.exits", "true"));
 
         @Advice.OnMethodEnter(suppress = Throwable.class)
         public static void methodEnter(
@@ -89,14 +82,14 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
             if (scope == null) {
                 return;
             }
+            System.out.println("EXIT ADVICE!");
 
-            if(instrumentExits){
-                AttributesBuilder builder = Attributes.builder()
-                        .put("State", result.getState().name());
+            if(INSTRUMENT_EXITS){
+                Span current = Span.current();
+                current.setAttribute(FRANK_EXIT_STATE_KEY, result.getState().name());
                 if(result.getExitCode()>0){
-                    builder.put("Code", result.getExitCode());
+                    current.setAttribute(FRANK_EXIT_CODE_KEY, result.getExitCode());
                 }
-                Span.current().addEvent("Exit", builder.build());
             }
 
             scope.close();

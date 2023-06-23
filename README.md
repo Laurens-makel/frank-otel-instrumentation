@@ -22,8 +22,9 @@ If you have any feedback, ideas or found any issues, please let us know by creat
 
 The Frank OTEL Instrumentation modules provide the following configurable options:
 
-### Enable/disable exit events
-If true, whenever an exit is taken, an event will be added to the current span.
+### Enable/disable exit tags
+If true, whenever an exit is taken, a tag will be added to the current span.
+![frank-otel-instrumentation-exit-option-example](zipkin-exit-tag.png)
 
 ##### Property
 - frank.instrumentation.exits=`true|false`
@@ -56,3 +57,9 @@ If true, context is propagated when an IteratorPipe is configured to work in par
 ##### Example Usage
 To disable this feature, add the following JVM property:
 - -Dfrank.instrumentation.parallel.iterator.propagation=false
+
+# Useful info
+
+- https://github.com/open-telemetry/opentelemetry-java-instrumentation/blob/main/docs/contributing/writing-instrumentation-module.md#write-an-instrumentationmodule-step-by-step
+- The OpenTelemetry Java agent loads Advice classes inside of its own isolated `AgentClassLoader`, but the Advice method bytecode is inlined into the instrumented application classes.
+- Application classes do not have access to the `AgentClassLoader`.
