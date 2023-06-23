@@ -1,5 +1,6 @@
 package org.example.pipe;
 
+import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.Scope;
 import io.opentelemetry.javaagent.extension.instrumentation.TypeInstrumentation;
@@ -7,15 +8,12 @@ import io.opentelemetry.javaagent.extension.instrumentation.TypeTransformer;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
-import nl.nn.adapterframework.core.IPipe;
-import nl.nn.adapterframework.core.PipeLine;
-import nl.nn.adapterframework.core.PipeLineSession;
-import nl.nn.adapterframework.core.PipeRunResult;
+import nl.nn.adapterframework.core.*;
 import nl.nn.adapterframework.stream.Message;
 
 import static io.opentelemetry.javaagent.bootstrap.Java8BytecodeBridge.currentContext;
 import static net.bytebuddy.matcher.ElementMatchers.*;
-import static org.example.pipe.FrankPipeSingletons.instrumenter;
+import static org.example.pipe.FrankPipeSingletons.*;
 
 public class FrankPipeInstrumentation implements TypeInstrumentation {
 
@@ -80,6 +78,13 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
                 @Advice.Local("otelScope") Scope scope) {
             if (scope == null) {
                 return;
+            }
+
+            if(TAG_FORWARDS){
+                PipeForward forward = result.getPipeForward();
+                Span current = Span.current();
+                current.setAttribute(FRANK_FORWARD_NAME_KEY, forward.getName());
+                current.setAttribute(FRANK_FORWARD_PATH_KEY, forward.getPath());
             }
 
             scope.close();
