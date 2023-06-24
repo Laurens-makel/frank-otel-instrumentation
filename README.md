@@ -4,6 +4,8 @@
 
 Provides configurable instrumentation modules for the [OpenTelemetry Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation) to instrument a [Frank Framework](https://github.com/ibissource/iaf) instance.
 
+The OpenTelemetry Agent instruments a lot of libaries and frameworks by default, this project aims to provide a production grade 'plug & play' module which helps to gain additional insights on the path a message took within a Frank application.
+
 ## Side Note
 This project is still under heavy development and based on the 7.7.6 release of the Frank Framework. The highest priority is to provide correct traces at first, then look into supporting features of newer versions of the framework.
 
