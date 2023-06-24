@@ -1,6 +1,6 @@
 # Frank OTEL Instrumentation
 
-![frank-otel-instrumentation-example](simple-example.png)
+![frank-otel-instrumentation-example](docs/img/simple-example.png)
 
 Provides configurable instrumentation modules for the [OpenTelemetry Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation) to instrument a [Frank Framework](https://github.com/ibissource/iaf) instance.
 
@@ -41,7 +41,7 @@ The Frank OTEL Instrumentation modules provide the following configurable option
 
 ## Exit tags
 If true, whenever an exit is taken, a tag will be added to the current span.
-![frank-otel-instrumentation-exit-option-example](zipkin-exit-tag.png)
+![frank-otel-instrumentation-exit-option-example](docs/img/zipkin-exit-tag.png)
 
 ### Property
 - frank.instrumentation.exits=`true|false`
@@ -53,7 +53,7 @@ To disable this feature, add the following JVM property:
 
 ## Forward tags
 If true, whenever a forward is taken, a tag will be added to the current span.
-![frank-otel-instrumentation-forward-option-example](zipkin-forward-tag.png)
+![frank-otel-instrumentation-forward-option-example](docs/img/zipkin-forward-tag.png)
 
 ### Property
 - frank.instrumentation.forwards=`true|false`
@@ -65,7 +65,7 @@ To disable this feature, add the following JVM property:
 
 ## Parameter events
 If true, whenever a parameter value is resolved, an event will be added to the current span.
-![frank-otel-instrumentation-parameter-option-example](zipkin-param-event.png)
+![frank-otel-instrumentation-parameter-option-example](docs/img/zipkin-param-event.png)
 
 ### Property
 - frank.instrumentation.parameters=`true|false` 
