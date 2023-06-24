@@ -8,8 +8,8 @@ import org.example.common.FrankExtractor;
 import org.example.common.FrankRequest;
 
 public class FrankSenderSingletons {
-
-    private static final String INSTRUMENTATION_NAME = "io.opentelemetry.apache-httpclient-4.0";
+    private static final String INSTRUMENTATION_NAME = "frank-framework-sender-instrumentation";
+    private static final boolean INSTRUMENTATION_ENABLED = System.getProperty("frank.instrumentation.senders", "true").equals("true");
     private static final Instrumenter<FrankSenderRequest, Message> INSTRUMENTER;
 
     static {
@@ -18,6 +18,7 @@ public class FrankSenderSingletons {
                                 INSTRUMENTATION_NAME,
                                 new FrankExtractor<FrankRequest<ISender>, Message>()
                         )
+                        .setEnabled(INSTRUMENTATION_ENABLED)
                         .setSpanStatusExtractor(new FrankExtractor<FrankRequest<ISender>, Message>())
                         .addAttributesExtractor(new FrankExtractor<FrankRequest<ISender>, Message>())
                         .buildInstrumenter();

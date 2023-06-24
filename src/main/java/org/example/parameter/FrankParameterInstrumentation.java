@@ -27,18 +27,16 @@ public class FrankParameterInstrumentation implements TypeInstrumentation {
 
     @Override
     public void transform(TypeTransformer transformer) {
-        if(System.getProperty("frank.instrumentation.parameters", "true").equals("true")){
-            transformer.applyAdviceToMethod(
-                    isMethod()
-                            .and(named("getValue"))
-                            .and(not(isAbstract()))
-                            .and(takesArguments(4))
-                            .and(takesArgument(0, named("nl.nn.adapterframework.parameters.ParameterValueList")))
-                            .and(takesArgument(1, named("nl.nn.adapterframework.stream.Message")))
-                            .and(takesArgument(2, named("nl.nn.adapterframework.core.PipeLineSession")))
-                            .and(takesArgument(3, named("boolean")))
-                    ,this.getClass().getName() + "$ParameterResolvedAdvice");
-        }
+        transformer.applyAdviceToMethod(
+                isMethod()
+                        .and(named("getValue"))
+                        .and(not(isAbstract()))
+                        .and(takesArguments(4))
+                        .and(takesArgument(0, named("nl.nn.adapterframework.parameters.ParameterValueList")))
+                        .and(takesArgument(1, named("nl.nn.adapterframework.stream.Message")))
+                        .and(takesArgument(2, named("nl.nn.adapterframework.core.PipeLineSession")))
+                        .and(takesArgument(3, named("boolean")))
+                ,this.getClass().getName() + "$ParameterResolvedAdvice");
     }
 
     @SuppressWarnings("unused")
