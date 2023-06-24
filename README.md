@@ -2,14 +2,31 @@
 
 ![frank-otel-instrumentation-example](simple-example.png)
 
-Provides instrumentation modules for the [OpenTelemetry Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation) to instrument a [Frank Framework](https://github.com/ibissource/iaf) instance.
+Provides configurable instrumentation modules for the [OpenTelemetry Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation) to instrument a [Frank Framework](https://github.com/ibissource/iaf) instance.
 
-### Side Note
+## Side Note
 This project is still under heavy development and based on the 7.7.6 release of the Frank Framework. The highest priority is to provide correct traces at first, then look into supporting features of newer versions of the framework.
-
 
 If you have any feedback, ideas or found any issues, please let us know by creating an issue.
 
+# Table of contents
+- [Demo](#demo)
+- [Configuration](#configuration)
+  * [Exit tags](#exit-tags)
+  * [Forward tags](#forward-tags)
+  * [Parameter events](#parameter-events)
+  * [Pipe spans](#pipe-spans)
+  * [Pipeline spans](#pipeline-spans)
+  * [Sender spans](#sender-spans)
+  * [IteratorPipe parallel context propagation](#iteratorpipe-parallel-context-propagation)
+- [Differences between Frank OTEL and Ladybug](#differences-between-frank-otel-and-ladybug)
+  * [Tracing vs Debugging](#tracing-vs-debugging)
+  * [Distributed vs Local](#distributed-vs-local)
+  * [Trace Information vs Full Insights](#trace-information-vs-full-insights)
+  * [Production ready](#production-ready)
+- [Useful info](#useful-info)
+
+  
 # Demo
 
 - Start Zipkin with the following command`docker run -d -p 9411:9411 openzipkin/zipkin`, open http://localhost:9411/zipkin/ to access the UI.
@@ -22,85 +39,105 @@ If you have any feedback, ideas or found any issues, please let us know by creat
 
 The Frank OTEL Instrumentation modules provide the following configurable options:
 
-### Enable/disable exit tags
+## Exit tags
 If true, whenever an exit is taken, a tag will be added to the current span.
 ![frank-otel-instrumentation-exit-option-example](zipkin-exit-tag.png)
 
-##### Property
+### Property
 - frank.instrumentation.exits=`true|false`
 - default: `true`
 
-##### Example Usage
+### Example Usage
 To disable this feature, add the following JVM property:
 - -Dfrank.instrumentation.exits=false
 
-### Enable/disable forward tags
+## Forward tags
 If true, whenever a forward is taken, a tag will be added to the current span.
 ![frank-otel-instrumentation-forward-option-example](zipkin-forward-tag.png)
 
-##### Property
+### Property
 - frank.instrumentation.forwards=`true|false`
 - default: `true`
 
-##### Example Usage
+### Example Usage
 To disable this feature, add the following JVM property:
 - -Dfrank.instrumentation.forwards=false
 
-### Enable/disable parameter events
+## Parameter events
 If true, whenever a parameter value is resolved, an event will be added to the current span.
 ![frank-otel-instrumentation-parameter-option-example](zipkin-param-event.png)
 
-##### Property
+### Property
 - frank.instrumentation.parameters=`true|false` 
 - default: `true`
 
-##### Example Usage
+### Example Usage
 To disable this feature, add the following JVM property:
 - -Dfrank.instrumentation.parameters=false
 
-### Enable/disable pipe spans
+## Pipe spans
 If true, whenever a pipe is called, a new span is created.
 
-##### Property
+### Property
 - frank.instrumentation.pipes=`true|false`
 - default: `true`
 
-##### Example Usage
+### Example Usage
 To disable this feature, add the following JVM property:
 - -Dfrank.instrumentation.pipes=false
 
-### Enable/disable pipeline spans
+## Pipeline spans
 If true, whenever a pipeline is called, a new span is created.
 
-##### Property
+### Property
 - frank.instrumentation.pipeline=`true|false`
 - default: `true`
 
-##### Example Usage
+### Example Usage
 To disable this feature, add the following JVM property:
 - -Dfrank.instrumentation.pipeline=false
 
-### Enable/disable sender spans
+## Sender spans
 If true, whenever a sender is called, a new span is created.
 
-##### Property
+### Property
 - frank.instrumentation.senders=`true|false`
 - default: `true`
 
-##### Example Usage
+### Example Usage
 To disable this feature, add the following JVM property:
 - -Dfrank.instrumentation.senders=false
 
-### Enable/disable IteratorPipe parallel context propagation
+## IteratorPipe parallel context propagation
 If true, context is propagated when an IteratorPipe is configured to work in parallel.
 
-##### Property
+### Property
 - frank.instrumentation.parallel.iterator.propagation=`true|false`
 - default: `true`
 
-##### Example Usage
+### Example Usage
 To disable this feature, add the following JVM property:
 - -Dfrank.instrumentation.parallel.iterator.propagation=false
+
+# Differences between Frank OTEL and Ladybug
+There is a certain overlap of information which is captured, especially when the instrumentation modules are configured in the most verbose modes. 
+There are certain differences between this project and the Ladybug project, the key differences are:
+
+## Tracing vs Debugging
+- Ladybug provides capabilities to debug and test the Frank application, i.e: inspect messages, compare reports, etc
+- This project is meant to provide compatibility for the Frank Framework with the Open Telemetry standard, which aims to provide a vendor-neutral standard for tracing messages across distributed systems. 
+
+## Distributed vs Local
+- Ladybug is only capable of providing information of a single Frank instance.
+- The OpenTelemetry standard is designed to provide information across distrubted systems.
+
+## Trace Information vs Full Insights
+- Ladybug provides full insights on how Frank components are configured, which sessionKeys are available within the session, it is inevitable that personal data is captured and visible for those with access to Ladybug.
+- This project only traces the path a message took and aims to provide several configurable options which help to prevent capturing personal data.
+
+## Production ready 
+- Ladybug should not be used in production due a heavy impact on the memory of the JVM but also due to the verbosity of the information that is captured.
+- The OpenTelemetry standard is designed to run in production systems and is used in production by sevaral organisations across the globe. 
 
 # Useful info
 
