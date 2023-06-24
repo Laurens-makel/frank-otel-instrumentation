@@ -8,7 +8,8 @@ import org.example.common.FrankExtractor;
 import org.example.common.FrankRequest;
 
 public class FrankParameterSingletons {
-    private static final String INSTRUMENTATION_NAME = "frank-framework-parameters-7.7.6";
+    private static final String INSTRUMENTATION_NAME = "frank-framework-parameters-instrumentation";
+    private static final boolean INSTRUMENTATION_ENABLED = System.getProperty("frank.instrumentation.parameters", "true").equals("true");
     private static final Instrumenter<FrankRequest<Parameter>, Message> INSTRUMENTER;
 
     static {
@@ -17,6 +18,7 @@ public class FrankParameterSingletons {
                         INSTRUMENTATION_NAME,
                         new FrankExtractor<FrankRequest<Parameter>, Message>()
                 )
+                .setEnabled(INSTRUMENTATION_ENABLED)
                 .setSpanStatusExtractor(new FrankExtractor<FrankRequest<Parameter>, Message>())
                 .addAttributesExtractor(new FrankExtractor<FrankRequest<Parameter>, Message>())
                 .buildInstrumenter();

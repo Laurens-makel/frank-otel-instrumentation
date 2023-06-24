@@ -58,6 +58,39 @@ If true, whenever a parameter value is resolved, an event will be added to the c
 To disable this feature, add the following JVM property:
 - -Dfrank.instrumentation.parameters=false
 
+### Enable/disable pipe spans
+If true, whenever a pipe is called, a new span is created.
+
+##### Property
+- frank.instrumentation.pipes=`true|false`
+- default: `true`
+
+##### Example Usage
+To disable this feature, add the following JVM property:
+- -Dfrank.instrumentation.pipes=false
+
+### Enable/disable pipeline spans
+If true, whenever a pipeline is called, a new span is created.
+
+##### Property
+- frank.instrumentation.pipeline=`true|false`
+- default: `true`
+
+##### Example Usage
+To disable this feature, add the following JVM property:
+- -Dfrank.instrumentation.pipeline=false
+
+### Enable/disable sender spans
+If true, whenever a sender is called, a new span is created.
+
+##### Property
+- frank.instrumentation.senders=`true|false`
+- default: `true`
+
+##### Example Usage
+To disable this feature, add the following JVM property:
+- -Dfrank.instrumentation.senders=false
+
 ### Enable/disable IteratorPipe parallel context propagation
 If true, context is propagated when an IteratorPipe is configured to work in parallel.
 
