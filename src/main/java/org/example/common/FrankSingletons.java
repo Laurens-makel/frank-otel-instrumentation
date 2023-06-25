@@ -70,6 +70,6 @@ public class FrankSingletons {
         return base(instrumentationName, instrumentationEnabled).buildInstrumenter();
     }
     private static Instrumenter<FrankRequest, INamedObject> buildClientInstrumenter(String instrumentationName, boolean instrumentationEnabled){
-        return base(instrumentationName, instrumentationEnabled).buildClientInstrumenter(FrankRequest::setSessionKey);
+        return base(instrumentationName, instrumentationEnabled).buildClientInstrumenter(FrankRequest::setPropagationSessionKeys);
     }
 }

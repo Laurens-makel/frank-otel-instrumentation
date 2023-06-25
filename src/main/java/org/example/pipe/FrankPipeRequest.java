@@ -8,23 +8,12 @@ import org.example.common.FrankRequest;
 
 public class FrankPipeRequest extends FrankRequest<IPipe> {
 
-    private final String contextPropagationKey;
-
     public FrankPipeRequest(Message message, PipeLineSession session, IPipe frankComponent) {
         super(message, session, frankComponent);
-
-        contextPropagationKey = detectContextPropagationKey();
     }
 
-    public boolean shouldPropagate(){
-        return contextPropagationKey != null;
-    }
-
-    public String getContextPropagationKey(){
-        return contextPropagationKey;
-    }
-
-    private String detectContextPropagationKey(){
+    @Override
+    protected String detectContextPropagationKey(){
         // IteratingPipes with 'parallel' set to 'true' spawn child threads
         if(frankComponent instanceof IteratingPipe){
             IteratingPipe iteratingPipe = ((IteratingPipe) frankComponent);
@@ -32,7 +21,7 @@ public class FrankPipeRequest extends FrankRequest<IPipe> {
                 return FrankRequest.SPAN_CONTEXT_SESSION_KEY+iteratingPipe.getSender().getName();
             }
         }
-        return null;
+        return super.detectContextPropagationKey();
     }
 
 }
