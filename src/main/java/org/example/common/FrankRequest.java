@@ -5,7 +5,7 @@ import nl.nn.adapterframework.core.PipeLineSession;
 import nl.nn.adapterframework.stream.Message;
 import org.apache.commons.lang3.StringUtils;
 
-public abstract class FrankRequest<T extends INamedObject> {
+public class FrankRequest<T extends INamedObject> {
 
     public final static String SPAN_CONTEXT_SESSION_KEY = "FrankInstrumentation.CurrentContext";
     protected final Message message;

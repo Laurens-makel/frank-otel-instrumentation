@@ -5,6 +5,7 @@ import io.opentelemetry.javaagent.extension.instrumentation.InstrumentationModul
 import io.opentelemetry.javaagent.extension.instrumentation.TypeInstrumentation;
 import org.example.common.FrankExtractor;
 import org.example.common.FrankRequest;
+import org.example.common.FrankSingletons;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class FrankPipeInstrumentationModule extends InstrumentationModule {
     @Override
     public List<String> getAdditionalHelperClassNames() {
         List<String> helpers = new ArrayList<>();
-        helpers.add(FrankPipeSingletons.class.getName());
+        helpers.add(FrankSingletons.class.getName());
         helpers.add(FrankPipeRequest.class.getName());
         helpers.add(FrankExtractor.class.getName());
         helpers.add(FrankRequest.class.getName());

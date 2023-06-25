@@ -14,6 +14,7 @@ import nl.nn.adapterframework.parameters.ParameterValueList;
 import nl.nn.adapterframework.stream.Message;
 
 import  io.opentelemetry.api.common.Attributes;
+import org.example.common.FrankRequest;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
@@ -41,19 +42,6 @@ public class FrankParameterInstrumentation implements TypeInstrumentation {
 
     @SuppressWarnings("unused")
     public static class ParameterResolvedAdvice {
-        @Advice.OnMethodEnter(suppress = Throwable.class)
-        public static void methodEnter(
-                @Advice.Argument(3) boolean namespaceAware,
-                @Advice.Argument(2) PipeLineSession session,
-                @Advice.Argument(1) Message message,
-                @Advice.Argument(0) ParameterValueList pvl,
-                @Advice.This Parameter parameter,
-                @Advice.Local("otelRequest") FrankParameterRequest otelRequest,
-                @Advice.Local("otelContext") Context context,
-                @Advice.Local("otelScope") Scope scope) {
-            System.out.println("PARAMETER EXECUTION ADVICE!");
-            otelRequest = new FrankParameterRequest(message, session, parameter);
-        }
 
         @Advice.OnMethodExit(onThrowable = Throwable.class, suppress = Throwable.class)
         public static void methodExit(
@@ -64,7 +52,6 @@ public class FrankParameterInstrumentation implements TypeInstrumentation {
                 @Advice.This Parameter parameter,
                 @Advice.Return Object result,
                 @Advice.Thrown Throwable throwable,
-                @Advice.Local("otelRequest") FrankParameterRequest otelRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
             Attributes attributes = Attributes.builder()

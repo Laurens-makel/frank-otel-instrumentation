@@ -8,15 +8,18 @@ import io.opentelemetry.javaagent.extension.instrumentation.TypeTransformer;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
+import nl.nn.adapterframework.core.IAdapter;
 import nl.nn.adapterframework.core.PipeLine;
 import nl.nn.adapterframework.core.PipeLineResult;
 import nl.nn.adapterframework.core.PipeLineSession;
 import nl.nn.adapterframework.stream.Message;
+import org.example.common.FrankRequest;
+import org.example.common.FrankSingletons;
 
 import static io.opentelemetry.javaagent.bootstrap.Java8BytecodeBridge.currentContext;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
-import static org.example.pipeline.FrankPipeLineSingletons.*;
+import static org.example.common.FrankSingletons.*;
 
 public class FrankPipeLineInstrumentation implements TypeInstrumentation {
 
@@ -51,19 +54,19 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
                 @Advice.Argument(2) Message message,
                 @Advice.Argument(1) String messageId,
                 @Advice.Argument(0) PipeLine pipeLine,
-                @Advice.Local("otelRequest") FrankPipeLineRequest otelRequest,
+                @Advice.Local("otelRequest") FrankRequest<IAdapter> otelRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
             Context parentContext = currentContext();
 
             System.out.println("PIPELINE EXECUTION ADVICE!");
-            otelRequest = new FrankPipeLineRequest(message, session, pipeLine.getAdapter());
+            otelRequest = new FrankRequest(message, session, pipeLine.getAdapter());
 
-            if (!instrumenter().shouldStart(parentContext, otelRequest)) {
+            if (!instrumenter(FrankSingletons.PIPELINE_INSTRUMENTATION_NAME).shouldStart(parentContext, otelRequest)) {
                 return;
             }
 
-            context = instrumenter().start(parentContext, otelRequest);
+            context = instrumenter(FrankSingletons.PIPELINE_INSTRUMENTATION_NAME).start(parentContext, otelRequest);
             scope = context.makeCurrent();
         }
 
@@ -76,7 +79,7 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
                 @Advice.Argument(0) PipeLine pipeLine,
                 @Advice.Return PipeLineResult result,
                 @Advice.Thrown Throwable throwable,
-                @Advice.Local("otelRequest") FrankPipeLineRequest otelRequest,
+                @Advice.Local("otelRequest") FrankRequest<IAdapter> otelRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
             if (scope == null) {
@@ -94,9 +97,9 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
 
             scope.close();
             if (throwable != null) {
-                instrumenter().end(context, otelRequest, null, throwable);
+                instrumenter(FrankSingletons.PIPELINE_INSTRUMENTATION_NAME).end(context, otelRequest, null, throwable);
             } else {
-                instrumenter().end(context, otelRequest, result, null);
+                instrumenter(FrankSingletons.PIPELINE_INSTRUMENTATION_NAME).end(context, otelRequest, result, null);
             }
         }
     }
