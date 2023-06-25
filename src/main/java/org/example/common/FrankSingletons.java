@@ -3,7 +3,7 @@ package org.example.common;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.instrumentation.api.instrumenter.Instrumenter;
 import io.opentelemetry.instrumentation.api.instrumenter.InstrumenterBuilder;
-import nl.nn.adapterframework.stream.Message;
+import nl.nn.adapterframework.core.INamedObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +33,7 @@ public class FrankSingletons {
     public static final String SENDER_INSTRUMENTATION_NAME = "frank-framework-sender-instrumentation";
     private static final String SENDER_INSTRUMENTATION_PROPERTY = "frank.instrumentation.senders";
 
-    private static final Map<String, Instrumenter<FrankRequest, Object>> instrumentations = new HashMap<>();
+    private static final Map<String, Instrumenter<FrankRequest, INamedObject>> instrumentations = new HashMap<>();
     static {
         instrumentations.put(
             SENDER_INSTRUMENTATION_NAME,
@@ -56,20 +56,20 @@ public class FrankSingletons {
     private static boolean getBooleanProperty(String key, String defaultValue){
         return Boolean.parseBoolean(System.getProperty(key, defaultValue));
     }
-    private static InstrumenterBuilder<FrankRequest, Object> base(String instrumentationName, boolean instrumentationEnabled){
-        return Instrumenter.<FrankRequest, Object> builder(
+    private static InstrumenterBuilder<FrankRequest, INamedObject> base(String instrumentationName, boolean instrumentationEnabled){
+        return Instrumenter.<FrankRequest, INamedObject> builder(
                         GlobalOpenTelemetry.get(),
                         instrumentationName,
-                        new FrankExtractor<FrankRequest, Message>()
+                        new FrankExtractor<FrankRequest, INamedObject>()
                 )
                 .setEnabled(instrumentationEnabled)
                 .setSpanStatusExtractor(new FrankExtractor())
                 .addAttributesExtractor(new FrankExtractor());
     }
-    private static Instrumenter<FrankRequest, Object> build(String instrumentationName, boolean instrumentationEnabled){
+    private static Instrumenter<FrankRequest, INamedObject> build(String instrumentationName, boolean instrumentationEnabled){
         return base(instrumentationName, instrumentationEnabled).buildInstrumenter();
     }
-    private static Instrumenter<FrankRequest, Object> buildClientInstrumenter(String instrumentationName, boolean instrumentationEnabled){
+    private static Instrumenter<FrankRequest, INamedObject> buildClientInstrumenter(String instrumentationName, boolean instrumentationEnabled){
         return base(instrumentationName, instrumentationEnabled).buildClientInstrumenter(FrankRequest::setSessionKey);
     }
 }
