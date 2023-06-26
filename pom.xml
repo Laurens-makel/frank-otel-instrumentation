@@ -14,13 +14,19 @@
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/com.google.auto.service/auto-service -->
         <dependency>
             <groupId>com.google.auto.service</groupId>
             <artifactId>auto-service</artifactId>
             <version>1.1.1</version>
+            <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-semconv</artifactId>
+            <version>1.27.0-alpha</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>org.ibissource</groupId>
             <artifactId>ibis-adapterframework-core</artifactId>
