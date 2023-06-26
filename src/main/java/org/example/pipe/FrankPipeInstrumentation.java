@@ -19,7 +19,7 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
 
     @Override
     public ElementMatcher<TypeDescription> typeMatcher() {
-        return named(FrankClasses.PIPE_PROCESSOR.className());
+        return named(FrankClasses.IPIPE.className());
     }
 
     @Override
@@ -58,9 +58,7 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
             scope = context.makeCurrent();
 
             // in certain situations, a pipe should manually propagate the tracing context to its children
-            if(frankRequest.shouldPropagate()){
-                session.put(frankRequest.getContextPropagationKey(), context);
-            }
+            frankRequest.setPropagationSessionKeys(frankRequest.detectContextPropagationKey(), context);
         }
 
         @Advice.OnMethodExit(onThrowable = Throwable.class, suppress = Throwable.class)

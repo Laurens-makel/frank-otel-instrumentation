@@ -33,13 +33,14 @@ public class FrankRequest<T extends INamedObject> {
         return StringUtils.substringBefore(frankComponent.getClass().getSimpleName(), "$$EnhancerBySpring");
     }
 
-    public void setPropagationSessionKeys(String key, String value){
+    public void setPropagationSessionKeys(String key, Object value){
         if(!shouldPropagate()) return;
         session.put(key, value);
     }
     public boolean shouldPropagate(){
         return contextPropagationKey != null;
     }
+    // should be overridden in a child class to detect 'special' situations where context should be delegated manually to child threads
     protected String detectContextPropagationKey() {
         return null;
     }
