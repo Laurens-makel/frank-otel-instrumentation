@@ -30,7 +30,7 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
                         .and(not(isAbstract()))
                         .and(takesArguments(4))
                         .and(takesArgument(0, named(FrankClasses.PIPELINE.className())))
-                        .and(takesArgument(1, named(FrankClasses.IPIPE.className())))
+                        .and(takesArgument(1, named(FrankClasses.PIPE.className())))
                         .and(takesArgument(2, named(FrankClasses.MESSAGE.className())))
                         .and(takesArgument(3, named(FrankClasses.PIPELINE_SESSION.className())))
                 ,this.getClass().getName() + "$PipeExecutionAdvice");
