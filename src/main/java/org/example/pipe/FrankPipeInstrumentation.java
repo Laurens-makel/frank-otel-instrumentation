@@ -10,10 +10,11 @@ import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import nl.nn.adapterframework.core.*;
 import nl.nn.adapterframework.stream.Message;
+import org.example.common.FrankSingletons;
 
 import static io.opentelemetry.javaagent.bootstrap.Java8BytecodeBridge.currentContext;
 import static net.bytebuddy.matcher.ElementMatchers.*;
-import static org.example.pipe.FrankPipeSingletons.*;
+import static org.example.common.FrankSingletons.*;
 
 public class FrankPipeInstrumentation implements TypeInstrumentation {
 
@@ -52,11 +53,11 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
             System.out.println("PIPE EXECUTION ADVICE!");
             otelRequest = new FrankPipeRequest(message, session, pipe);
 
-            if (!instrumenter().shouldStart(parentContext, otelRequest)) {
+            if (!instrumenter(FrankSingletons.PIPE_INSTRUMENTATION_NAME).shouldStart(parentContext, otelRequest)) {
                 return;
             }
 
-            context = instrumenter().start(parentContext, otelRequest);
+            context = instrumenter(FrankSingletons.PIPE_INSTRUMENTATION_NAME).start(parentContext, otelRequest);
             scope = context.makeCurrent();
 
             // in certain situations, a pipe should manually propagate the tracing context to its children
@@ -89,9 +90,9 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
 
             scope.close();
             if (throwable != null) {
-                instrumenter().end(context, otelRequest, null, throwable);
+                instrumenter(FrankSingletons.PIPE_INSTRUMENTATION_NAME).end(context, otelRequest, null, throwable);
             } else {
-                instrumenter().end(context, otelRequest, result, null);
+                instrumenter(FrankSingletons.PIPE_INSTRUMENTATION_NAME).end(context, otelRequest, result, null);
             }
 
             // remove context from session again, since it's not relevant anymore

@@ -10,15 +10,15 @@ import net.bytebuddy.matcher.ElementMatcher;
 import nl.nn.adapterframework.core.*;
 import nl.nn.adapterframework.stream.Message;
 import org.example.common.FrankRequest;
+import org.example.common.FrankSingletons;
 
 
 import static io.opentelemetry.javaagent.bootstrap.Java8BytecodeBridge.currentContext;
 import static io.opentelemetry.javaagent.extension.matcher.AgentElementMatchers.implementsInterface;
 import static net.bytebuddy.matcher.ElementMatchers.*;
-import static org.example.sender.FrankSenderSingletons.instrumenter;
+import static org.example.common.FrankSingletons.instrumenter;
 
 public class FrankSenderInstrumentation implements TypeInstrumentation {
-
 
     @Override
     public ElementMatcher<TypeDescription> typeMatcher() {
@@ -43,7 +43,7 @@ public class FrankSenderInstrumentation implements TypeInstrumentation {
                 @Advice.Argument(1) PipeLineSession session,
                 @Advice.Argument(0) Message message,
                 @Advice.This ISender sender,
-                @Advice.Local("otelRequest") FrankSenderRequest otelRequest,
+                @Advice.Local("otelRequest") FrankRequest<ISender> otelRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
             boolean useSessionContext = session.containsKey(FrankRequest.SPAN_CONTEXT_SESSION_KEY+sender.getName());
@@ -54,13 +54,13 @@ public class FrankSenderInstrumentation implements TypeInstrumentation {
 
 
             System.out.println("SENDER EXECUTION ADVICE!");
-            otelRequest = new FrankSenderRequest(message, session, sender);
+            otelRequest = new FrankRequest<>(message, session, sender);
 
-            if (!instrumenter().shouldStart(parentContext, otelRequest)) {
+            if (!instrumenter(FrankSingletons.SENDER_INSTRUMENTATION_NAME).shouldStart(parentContext, otelRequest)) {
                 return;
             }
 
-            context = instrumenter().start(parentContext, otelRequest);
+            context = instrumenter(FrankSingletons.SENDER_INSTRUMENTATION_NAME).start(parentContext, otelRequest);
             scope = context.makeCurrent();
         }
 
@@ -70,7 +70,7 @@ public class FrankSenderInstrumentation implements TypeInstrumentation {
                 @Advice.Argument(0) Message message,
                 @Advice.Return Message result,
                 @Advice.Thrown Throwable throwable,
-                @Advice.Local("otelRequest") FrankSenderRequest otelRequest,
+                @Advice.Local("otelRequest") FrankRequest<ISender> otelRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
             if (scope == null) {
@@ -79,9 +79,9 @@ public class FrankSenderInstrumentation implements TypeInstrumentation {
 
             scope.close();
             if (throwable != null) {
-                instrumenter().end(context, otelRequest, null, throwable);
+                instrumenter(FrankSingletons.SENDER_INSTRUMENTATION_NAME).end(context, otelRequest, null, throwable);
             } else {
-                instrumenter().end(context, otelRequest, result, null);
+                instrumenter(FrankSingletons.SENDER_INSTRUMENTATION_NAME).end(context, otelRequest, result, null);
             }
         }
     }
