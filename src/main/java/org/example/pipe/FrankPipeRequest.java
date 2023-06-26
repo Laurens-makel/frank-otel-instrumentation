@@ -16,7 +16,7 @@ public class FrankPipeRequest extends FrankRequest<IPipe> {
     protected String detectContextPropagationKey(){
         // IteratingPipes with 'parallel' set to 'true' spawn child threads
         if(frankComponent instanceof IteratingPipe){
-            IteratingPipe iteratingPipe = ((IteratingPipe) frankComponent);
+            IteratingPipe iteratingPipe = (IteratingPipe) frankComponent;
             if(iteratingPipe.isParallel()){
                 return FrankRequest.SPAN_CONTEXT_SESSION_KEY+iteratingPipe.getSender().getName();
             }

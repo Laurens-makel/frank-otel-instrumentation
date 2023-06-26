@@ -3,12 +3,40 @@ package org.example.common;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.instrumentation.api.instrumenter.Instrumenter;
 import io.opentelemetry.instrumentation.api.instrumenter.InstrumenterBuilder;
-import nl.nn.adapterframework.core.INamedObject;
+import nl.nn.adapterframework.core.*;
+import nl.nn.adapterframework.parameters.Parameter;
+import nl.nn.adapterframework.parameters.ParameterValueList;
+import nl.nn.adapterframework.processors.CorePipeLineProcessor;
+import nl.nn.adapterframework.processors.InputOutputPipeProcessor;
+import nl.nn.adapterframework.stream.Message;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class FrankSingletons {
+
+    public enum FrankClasses {
+        IPIPE(IPipe.class.getName()),
+        MESSAGE(Message.class.getName()),
+        PARAMETER(Parameter.class.getName()),
+        PARAMETER_VALUE_LIST(ParameterValueList.class.getName()),
+        PIPELINE(PipeLine.class.getName()),
+        PIPELINE_PROCESSOR(CorePipeLineProcessor.class.getName()),
+        PIPELINE_SESSION(PipeLineSession.class.getName()),
+        PIPE_PROCESSOR(InputOutputPipeProcessor.class.getName()),
+        SENDER(ISender.class.getName()),
+        STRING("java.lang.String");
+
+        private String className;
+
+        FrankClasses(String className) {
+            this.className = className;
+        }
+
+        public String className() {
+            return className;
+        }
+    }
 
     /* EXITS */
     public static final String FRANK_EXIT_STATE_KEY = "frank.exit.state";

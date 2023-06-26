@@ -11,6 +11,7 @@ import nl.nn.adapterframework.core.*;
 import nl.nn.adapterframework.stream.Message;
 import org.example.common.FrankRequest;
 import org.example.common.FrankSingletons;
+import org.example.common.FrankSingletons.FrankClasses;
 
 import static io.opentelemetry.javaagent.extension.matcher.AgentElementMatchers.implementsInterface;
 import static net.bytebuddy.matcher.ElementMatchers.*;
@@ -20,7 +21,7 @@ public class FrankSenderInstrumentation implements TypeInstrumentation {
 
     @Override
     public ElementMatcher<TypeDescription> typeMatcher() {
-        return implementsInterface(named("nl.nn.adapterframework.core.ISender"));
+        return implementsInterface(named(FrankClasses.SENDER.className()));
     }
 
     @Override
@@ -29,8 +30,8 @@ public class FrankSenderInstrumentation implements TypeInstrumentation {
                 isMethod()
                         .and(named("sendMessage"))
                         .and(takesArguments(2))
-                        .and(takesArgument(0, named("nl.nn.adapterframework.stream.Message")))
-                        .and(takesArgument(1, named("nl.nn.adapterframework.core.PipeLineSession")))
+                        .and(takesArgument(0, named(FrankClasses.MESSAGE.className())))
+                        .and(takesArgument(1, named(FrankClasses.PIPELINE_SESSION.className())))
                 ,this.getClass().getName() + "$SenderExecutionAdvice");
     }
 
