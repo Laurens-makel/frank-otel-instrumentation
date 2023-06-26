@@ -125,9 +125,16 @@ To disable this feature, add the following JVM property:
 ## Frank Framework API tracing
 By default the OpenTelemetry agent also traces all traffic towards the Frank Framework API. It might be desired to disable tracing traffic towards these endpoints.
 
-By activating the Frank Framework API sampler, all traffic towards the API is not sampled.
+By activating the Frank Framework API sampler, all traffic towards configured endpoints will be ignored.
+
 ### Environment variable
+Set the following environment variable to active the Frank Framework API Sampler
 - OTEL_TRACES_SAMPLER=frank_framework_api_sampler
+
+### Property
+Override the following property to configure the list of endpoints that should be ignored.
+- frank.sampler.ignore.http=`comma,separated,list`
+- default: `/iaf/api,/iaf/gui,/testtool`
 
 # Differences between Frank OTEL and Ladybug
 There is a certain overlap of information which is captured, especially when the instrumentation modules are configured in the most verbose modes. 
