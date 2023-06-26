@@ -21,6 +21,7 @@ If you have any feedback, ideas or found any issues, please let us know by creat
   * [Pipeline spans](#pipeline-spans)
   * [Sender spans](#sender-spans)
   * [IteratorPipe parallel context propagation](#iteratorpipe-parallel-context-propagation)
+  * [Frank Framework API Tracing](#frank-framework-api-tracing)
 - [Differences between Frank OTEL and Ladybug](#differences-between-frank-otel-and-ladybug)
   * [Tracing vs Debugging](#tracing-vs-debugging)
   * [Distributed vs Local](#distributed-vs-local)
@@ -120,6 +121,13 @@ If true, context is propagated when an IteratorPipe is configured to work in par
 ### Example Usage
 To disable this feature, add the following JVM property:
 - -Dfrank.instrumentation.parallel.iterator.propagation=false
+
+## Frank Framework API tracing
+By default the OpenTelemetry agent also traces all traffic towards the Frank Framework API. It might be desired to disable tracing traffic towards these endpoints.
+
+By activating the Frank Framework API sampler, all traffic towards the API is not sampled.
+### Environment variable
+- OTEL_TRACES_SAMPLER=frank_framework_api_sampler
 
 # Differences between Frank OTEL and Ladybug
 There is a certain overlap of information which is captured, especially when the instrumentation modules are configured in the most verbose modes. 
