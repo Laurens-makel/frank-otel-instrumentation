@@ -14,7 +14,6 @@ import nl.nn.adapterframework.parameters.ParameterValueList;
 import nl.nn.adapterframework.stream.Message;
 
 import  io.opentelemetry.api.common.Attributes;
-import org.example.common.FrankRequest;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
@@ -54,12 +53,9 @@ public class FrankParameterInstrumentation implements TypeInstrumentation {
                 @Advice.Thrown Throwable throwable,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
-            Attributes attributes = Attributes.builder()
+            Span.current().addEvent("Parameter Resolved", Attributes.builder()
                     .put(parameter.getName(), result.toString())
-                    .build();
-            System.out.println("PARAMETER RESOLVED!");
-
-            Span.current().addEvent("Parameter Resolved", attributes);
+                    .build());
         }
     }
 }

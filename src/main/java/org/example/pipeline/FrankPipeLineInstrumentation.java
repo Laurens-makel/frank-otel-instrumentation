@@ -54,19 +54,17 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
                 @Advice.Argument(2) Message message,
                 @Advice.Argument(1) String messageId,
                 @Advice.Argument(0) PipeLine pipeLine,
-                @Advice.Local("otelRequest") FrankRequest<IAdapter> otelRequest,
+                @Advice.Local("otelRequest") FrankRequest<IAdapter> frankRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
-            Context parentContext = currentContext();
+            frankRequest = new FrankRequest(message, session, pipeLine.getAdapter());
+            Context parentContext = frankRequest.getParentContext();
 
-            System.out.println("PIPELINE EXECUTION ADVICE!");
-            otelRequest = new FrankRequest(message, session, pipeLine.getAdapter());
-
-            if (!instrumenter(FrankSingletons.PIPELINE_INSTRUMENTATION_NAME).shouldStart(parentContext, otelRequest)) {
+            if (!instrumenter(FrankSingletons.PIPELINE_INSTRUMENTATION_NAME).shouldStart(parentContext, frankRequest)) {
                 return;
             }
 
-            context = instrumenter(FrankSingletons.PIPELINE_INSTRUMENTATION_NAME).start(parentContext, otelRequest);
+            context = instrumenter(FrankSingletons.PIPELINE_INSTRUMENTATION_NAME).start(parentContext, frankRequest);
             scope = context.makeCurrent();
         }
 
@@ -79,7 +77,7 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
                 @Advice.Argument(0) PipeLine pipeLine,
                 @Advice.Return PipeLineResult result,
                 @Advice.Thrown Throwable throwable,
-                @Advice.Local("otelRequest") FrankRequest<IAdapter> otelRequest,
+                @Advice.Local("otelRequest") FrankRequest<IAdapter> frankRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
             if (scope == null) {
@@ -97,9 +95,9 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
 
             scope.close();
             if (throwable != null) {
-                instrumenter(FrankSingletons.PIPELINE_INSTRUMENTATION_NAME).end(context, otelRequest, null, throwable);
+                instrumenter(FrankSingletons.PIPELINE_INSTRUMENTATION_NAME).end(context, frankRequest, null, throwable);
             } else {
-                instrumenter(FrankSingletons.PIPELINE_INSTRUMENTATION_NAME).end(context, otelRequest, result, null);
+                instrumenter(FrankSingletons.PIPELINE_INSTRUMENTATION_NAME).end(context, frankRequest, result, null);
             }
         }
     }

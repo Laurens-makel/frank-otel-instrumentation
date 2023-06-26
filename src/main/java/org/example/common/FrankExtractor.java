@@ -10,27 +10,28 @@ import io.opentelemetry.instrumentation.api.instrumenter.SpanStatusExtractor;
 
 import javax.annotation.Nullable;
 
-public class FrankExtractor<F extends FrankRequest, R> implements AttributesExtractor<F, R>, SpanNameExtractor<F>, SpanStatusExtractor<F, R> {
+public class FrankExtractor<FRANK_ELEMENT_REQUEST extends FrankRequest, RESPONSE> implements SpanNameExtractor<FRANK_ELEMENT_REQUEST>,
+            SpanStatusExtractor<FRANK_ELEMENT_REQUEST, RESPONSE>, AttributesExtractor<FRANK_ELEMENT_REQUEST, RESPONSE> {
 
-    public final static String FRANK_ELEMENT_TYPE_KEY = "frank.element.type";
+    public final static String FRANK_ELEMENT_REQUEST_TYPE_KEY = "frank.element.type";
 
     @Override
-    public void onStart(AttributesBuilder attributesBuilder, Context context, F frankRequest) {
-        attributesBuilder.put(FRANK_ELEMENT_TYPE_KEY, frankRequest.getFrankElementType());
+    public void onStart(AttributesBuilder attributesBuilder, Context context, FRANK_ELEMENT_REQUEST frankRequest) {
+        attributesBuilder.put(FRANK_ELEMENT_REQUEST_TYPE_KEY, frankRequest.getFrankElementType());
     }
 
     @Override
-    public void onEnd(AttributesBuilder attributesBuilder, Context context, F t, @Nullable R r, @Nullable Throwable throwable) {
+    public void onEnd(AttributesBuilder attributesBuilder, Context context, FRANK_ELEMENT_REQUEST t, @Nullable RESPONSE r, @Nullable Throwable throwable) {
 
     }
 
     @Override
-    public String extract(F frankRequest) {
+    public String extract(FRANK_ELEMENT_REQUEST frankRequest) {
         return frankRequest.getFrankElementType()+" ["+frankRequest.getName()+"]";
     }
 
     @Override
-    public void extract(SpanStatusBuilder spanStatusBuilder, F f, @Nullable R r, @Nullable Throwable throwable) {
+    public void extract(SpanStatusBuilder spanStatusBuilder, FRANK_ELEMENT_REQUEST f, @Nullable RESPONSE r, @Nullable Throwable throwable) {
         if(throwable!=null){
             spanStatusBuilder.setStatus(StatusCode.ERROR, throwable.getMessage());
         }
