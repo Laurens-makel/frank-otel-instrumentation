@@ -3,12 +3,7 @@ package org.example.common;
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.instrumentation.api.instrumenter.Instrumenter;
 import io.opentelemetry.instrumentation.api.instrumenter.InstrumenterBuilder;
-import nl.nn.adapterframework.core.*;
-import nl.nn.adapterframework.parameters.Parameter;
-import nl.nn.adapterframework.parameters.ParameterValueList;
-import nl.nn.adapterframework.processors.CorePipeLineProcessor;
-import nl.nn.adapterframework.processors.InputOutputPipeProcessor;
-import nl.nn.adapterframework.stream.Message;
+import nl.nn.adapterframework.core.INamedObject;
 
 import java.util.HashMap;
 import java.util.Map;
