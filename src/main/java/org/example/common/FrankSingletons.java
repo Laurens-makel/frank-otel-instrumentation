@@ -16,15 +16,15 @@ import java.util.Map;
 public class FrankSingletons {
 
     public enum FrankClasses {
-        MESSAGE(Message.class.getName()),
-        PARAMETER(Parameter.class.getName()),
-        PARAMETER_VALUE_LIST(ParameterValueList.class.getName()),
-        PIPE(IPipe.class.getName()),
-        PIPE_PROCESSOR(InputOutputPipeProcessor.class.getName()),
-        PIPELINE(PipeLine.class.getName()),
-        PIPELINE_PROCESSOR(CorePipeLineProcessor.class.getName()),
-        PIPELINE_SESSION(PipeLineSession.class.getName()),
-        SENDER(ISender.class.getName()),
+        MESSAGE("nl.nn.adapterframework.stream.Message"),
+        PARAMETER("nl.nn.adapterframework.parameters.Parameter"),
+        PARAMETER_VALUE_LIST("nl.nn.adapterframework.parameters.ParameterValueList"),
+        PIPE("nl.nn.adapterframework.core.IPipe"),
+        PIPE_PROCESSOR("nl.nn.adapterframework.processors.InputOutputPipeProcessor"),
+        PIPELINE("nl.nn.adapterframework.core.PipeLine"),
+        PIPELINE_PROCESSOR("nl.nn.adapterframework.processors.CorePipeLineProcessor"),
+        PIPELINE_SESSION("nl.nn.adapterframework.core.PipeLineSession"),
+        SENDER("nl.nn.adapterframework.core.ISender"),
         STRING("java.lang.String");
 
         private String className;

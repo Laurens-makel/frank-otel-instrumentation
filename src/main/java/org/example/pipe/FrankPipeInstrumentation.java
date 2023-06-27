@@ -19,7 +19,7 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
 
     @Override
     public ElementMatcher<TypeDescription> typeMatcher() {
-        return named(FrankClasses.PIPE.className());
+        return named(FrankClasses.PIPE_PROCESSOR.className());
     }
 
     @Override
