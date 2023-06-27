@@ -54,6 +54,7 @@ public class FrankParameterInstrumentation implements TypeInstrumentation {
                 @Advice.Thrown Throwable throwable,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
+            Span.current().setAttribute(parameter.getName(), result.toString());
             Span.current().addEvent("Parameter Resolved", Attributes.builder()
                     .put(parameter.getName(), result.toString())
                     .build());
