@@ -58,7 +58,7 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
             scope = context.makeCurrent();
 
             // in certain situations, a pipe should manually propagate the tracing context to its children
-            frankRequest.setPropagationSessionKeys(frankRequest.detectContextPropagationKey(), context);
+            frankRequest.setPropagationSessionKeys(frankRequest.getContextPropagationKey(), context);
         }
 
         @Advice.OnMethodExit(onThrowable = Throwable.class, suppress = Throwable.class)
