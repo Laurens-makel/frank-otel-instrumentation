@@ -25,9 +25,14 @@ public class FrankApiSampler implements Sampler {
     @Override
     public SamplingResult shouldSample(Context context, String traceId, String name, SpanKind spanKind, Attributes attributes, List<LinkData> list) {
         String httpTarget = attributes.get(SemanticAttributes.HTTP_TARGET);
-        if(httpTargetPatterns.contains(httpTarget)){
-            return SamplingResult.drop();
+        if(httpTarget!=null){
+            for(String pattern : httpTargetPatterns){
+                if(httpTarget.contains(pattern)){
+                    return SamplingResult.drop();
+                }
+            }
         }
+
         return SamplingResult.recordAndSample();
     }
 

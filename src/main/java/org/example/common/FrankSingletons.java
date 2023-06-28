@@ -10,6 +10,29 @@ import java.util.Map;
 
 public class FrankSingletons {
 
+    public enum FrankClasses {
+        MESSAGE("nl.nn.adapterframework.stream.Message"),
+        PARAMETER("nl.nn.adapterframework.parameters.Parameter"),
+        PARAMETER_VALUE_LIST("nl.nn.adapterframework.parameters.ParameterValueList"),
+        PIPE("nl.nn.adapterframework.core.IPipe"),
+        PIPE_PROCESSOR("nl.nn.adapterframework.processors.InputOutputPipeProcessor"),
+        PIPELINE("nl.nn.adapterframework.core.PipeLine"),
+        PIPELINE_PROCESSOR("nl.nn.adapterframework.processors.CorePipeLineProcessor"),
+        PIPELINE_SESSION("nl.nn.adapterframework.core.PipeLineSession"),
+        SENDER("nl.nn.adapterframework.core.ISender"),
+        STRING("java.lang.String");
+
+        private String className;
+
+        FrankClasses(String className) {
+            this.className = className;
+        }
+
+        public String className() {
+            return className;
+        }
+    }
+
     /* EXITS */
     public static final String FRANK_EXIT_STATE_KEY = "frank.exit.state";
     public static final String FRANK_EXIT_CODE_KEY = "frank.exit.code";

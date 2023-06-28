@@ -14,7 +14,7 @@ import nl.nn.adapterframework.parameters.ParameterValueList;
 import nl.nn.adapterframework.stream.Message;
 
 import  io.opentelemetry.api.common.Attributes;
-import org.example.common.FrankRequest;
+import org.example.common.FrankSingletons.FrankClasses;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
@@ -23,7 +23,7 @@ public class FrankParameterInstrumentation implements TypeInstrumentation {
 
     @Override
     public ElementMatcher<TypeDescription> typeMatcher() {
-        return named("nl.nn.adapterframework.parameters.Parameter");
+        return named(FrankClasses.PARAMETER.className());
     }
 
     @Override
@@ -33,9 +33,9 @@ public class FrankParameterInstrumentation implements TypeInstrumentation {
                         .and(named("getValue"))
                         .and(not(isAbstract()))
                         .and(takesArguments(4))
-                        .and(takesArgument(0, named("nl.nn.adapterframework.parameters.ParameterValueList")))
-                        .and(takesArgument(1, named("nl.nn.adapterframework.stream.Message")))
-                        .and(takesArgument(2, named("nl.nn.adapterframework.core.PipeLineSession")))
+                        .and(takesArgument(0, named(FrankClasses.PARAMETER_VALUE_LIST.className())))
+                        .and(takesArgument(1, named(FrankClasses.MESSAGE.className())))
+                        .and(takesArgument(2, named(FrankClasses.PIPELINE_SESSION.className())))
                         .and(takesArgument(3, named("boolean")))
                 ,this.getClass().getName() + "$ParameterResolvedAdvice");
     }
@@ -54,12 +54,10 @@ public class FrankParameterInstrumentation implements TypeInstrumentation {
                 @Advice.Thrown Throwable throwable,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
-            Attributes attributes = Attributes.builder()
+            Span.current().setAttribute(parameter.getName(), result.toString());
+            Span.current().addEvent("Parameter Resolved", Attributes.builder()
                     .put(parameter.getName(), result.toString())
-                    .build();
-            System.out.println("PARAMETER RESOLVED!");
-
-            Span.current().addEvent("Parameter Resolved", attributes);
+                    .build());
         }
     }
 }

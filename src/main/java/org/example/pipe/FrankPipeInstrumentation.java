@@ -12,7 +12,6 @@ import nl.nn.adapterframework.core.*;
 import nl.nn.adapterframework.stream.Message;
 import org.example.common.FrankSingletons;
 
-import static io.opentelemetry.javaagent.bootstrap.Java8BytecodeBridge.currentContext;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static org.example.common.FrankSingletons.*;
 
@@ -20,7 +19,7 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
 
     @Override
     public ElementMatcher<TypeDescription> typeMatcher() {
-        return named("nl.nn.adapterframework.processors.InputOutputPipeProcessor");
+        return named(FrankClasses.PIPE_PROCESSOR.className());
     }
 
     @Override
@@ -30,10 +29,10 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
                         .and(named("processPipe"))
                         .and(not(isAbstract()))
                         .and(takesArguments(4))
-                        .and(takesArgument(0, named("nl.nn.adapterframework.core.PipeLine")))
-                        .and(takesArgument(1, named("nl.nn.adapterframework.core.IPipe")))
-                        .and(takesArgument(2, named("nl.nn.adapterframework.stream.Message")))
-                        .and(takesArgument(3, named("nl.nn.adapterframework.core.PipeLineSession")))
+                        .and(takesArgument(0, named(FrankClasses.PIPELINE.className())))
+                        .and(takesArgument(1, named(FrankClasses.PIPE.className())))
+                        .and(takesArgument(2, named(FrankClasses.MESSAGE.className())))
+                        .and(takesArgument(3, named(FrankClasses.PIPELINE_SESSION.className())))
                 ,this.getClass().getName() + "$PipeExecutionAdvice");
     }
 
@@ -45,25 +44,21 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
                 @Advice.Argument(2) Message message,
                 @Advice.Argument(1) IPipe pipe,
                 @Advice.Argument(0) PipeLine pipeLine,
-                @Advice.Local("otelRequest") FrankPipeRequest otelRequest,
+                @Advice.Local("otelRequest") FrankPipeRequest frankRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
-            Context parentContext = currentContext();
+            frankRequest = new FrankPipeRequest(message, session, pipe);
+            Context parentContext = frankRequest.getParentContext();
 
-            System.out.println("PIPE EXECUTION ADVICE!");
-            otelRequest = new FrankPipeRequest(message, session, pipe);
-
-            if (!instrumenter(FrankSingletons.PIPE_INSTRUMENTATION_NAME).shouldStart(parentContext, otelRequest)) {
+            if (!instrumenter(FrankSingletons.PIPE_INSTRUMENTATION_NAME).shouldStart(parentContext, frankRequest)) {
                 return;
             }
 
-            context = instrumenter(FrankSingletons.PIPE_INSTRUMENTATION_NAME).start(parentContext, otelRequest);
+            context = instrumenter(FrankSingletons.PIPE_INSTRUMENTATION_NAME).start(parentContext, frankRequest);
             scope = context.makeCurrent();
 
             // in certain situations, a pipe should manually propagate the tracing context to its children
-            if(otelRequest.shouldPropagate()){
-                session.put(otelRequest.getContextPropagationKey(), context);
-            }
+            frankRequest.setPropagationSessionKeys(frankRequest.getContextPropagationKey(), context);
         }
 
         @Advice.OnMethodExit(onThrowable = Throwable.class, suppress = Throwable.class)
@@ -74,7 +69,7 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
                 @Advice.Argument(0) PipeLine pipeLine,
                 @Advice.Return PipeRunResult result,
                 @Advice.Thrown Throwable throwable,
-                @Advice.Local("otelRequest") FrankPipeRequest otelRequest,
+                @Advice.Local("otelRequest") FrankPipeRequest frankRequest,
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
             if (scope == null) {
@@ -90,14 +85,14 @@ public class FrankPipeInstrumentation implements TypeInstrumentation {
 
             scope.close();
             if (throwable != null) {
-                instrumenter(FrankSingletons.PIPE_INSTRUMENTATION_NAME).end(context, otelRequest, null, throwable);
+                instrumenter(FrankSingletons.PIPE_INSTRUMENTATION_NAME).end(context, frankRequest, null, throwable);
             } else {
-                instrumenter(FrankSingletons.PIPE_INSTRUMENTATION_NAME).end(context, otelRequest, result, null);
+                instrumenter(FrankSingletons.PIPE_INSTRUMENTATION_NAME).end(context, frankRequest, result, null);
             }
 
             // remove context from session again, since it's not relevant anymore
-            if(otelRequest.shouldPropagate()){
-                session.remove(otelRequest.getContextPropagationKey());
+            if(frankRequest.shouldPropagate()){
+                session.remove(frankRequest.getContextPropagationKey());
             }
         }
     }
