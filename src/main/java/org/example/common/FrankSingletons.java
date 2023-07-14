@@ -42,7 +42,7 @@ public class FrankSingletons {
     public static final String FRANK_FORWARD_NAME_KEY = "frank.forward.name";
     public static final String FRANK_FORWARD_PATH_KEY = "frank.forward.path";
     public static boolean TAG_FORWARDS = getBooleanProperty("frank.instrumentation.forwards", "true");
-
+    public static boolean PARAMETER_EVENTS = getBooleanProperty("frank.instrumentation.parameters", "true");
     /* INSTRUMENTATIONS */
     public static final String PIPELINE_INSTRUMENTATION_NAME = "frank-framework-pipeline-instrumentation";
     private static final String PIPELINE_INSTRUMENTATION_PROPERTY = "frank.instrumentation.pipeline";
