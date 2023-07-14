@@ -39,7 +39,7 @@ public class FrankSingletons {
 
     public static boolean TAG_EXITS = getBooleanProperty("frank.instrumentation.exits", "true");
     public static boolean TAG_LOG_CONTEXT = getBooleanProperty("frank.instrumentation.logContext", "true");
-    public static boolean PARAMETER_EVENTS = getBooleanProperty("frank.instrumentation.parameters", "false");
+    public static boolean PARAMETER_EVENTS = getBooleanProperty("frank.instrumentation.parameters", "true");
 
     /* FORWARDS */
     public static final String FRANK_FORWARD_NAME_KEY = "frank.forward.name";
