@@ -4,13 +4,10 @@
 
 Provides configurable instrumentation modules for the [OpenTelemetry Agent](https://github.com/open-telemetry/opentelemetry-java-instrumentation) to instrument a [Frank Framework](https://github.com/ibissource/iaf) instance.
 
-The OpenTelemetry Agent instruments a lot of libraries and frameworks by default, this project aims to provide a production grade 'plug & play' module which helps to gain additional insights on the path a message took within a Frank application.
+The OpenTelemetry Agent instruments a lot of libaries and frameworks by default, this project aims to provide a production grade 'plug & play' module which helps to gain additional insights on the path a message took within a Frank application.
 
 ## Side Note
-This project is still under heavy development and the master is based on the 7.8 release of the Frank Framework. The highest priority is to provide correct traces at first, then look into supporting features of newer versions of the framework.
-
-Other supported version (see branches):
-- 7.7.X releases
+This project is still under heavy development and based on the 7.7.6 release of the Frank Framework. The highest priority is to provide correct traces at first, then look into supporting features of newer versions of the framework.
 
 If you have any feedback, ideas or found any issues, please let us know by creating an issue.
 
@@ -19,7 +16,6 @@ If you have any feedback, ideas or found any issues, please let us know by creat
 - [Configuration](#configuration)
   * [Exit tags](#exit-tags)
   * [Forward tags](#forward-tags)
-  * [LogContext tags](#logcontext-tags)
   * [Parameter events](#parameter-events)
   * [Pipe spans](#pipe-spans)
   * [Pipeline spans](#pipeline-spans)
@@ -70,28 +66,17 @@ If true, whenever a forward is taken, a tag will be added to the current span.
 To disable this feature, add the following JVM property:
 - -Dfrank.instrumentation.forwards=false
 
-## LogContext tags
-If true, whenever a pipeline is finished, a tag for each entry in the log context will be added to the current span.
-
-### Property
-- frank.instrumentation.logContext=`true|false`
-- default: `true`
-
-### Example Usage
-To disable this feature, add the following JVM property:
-- -Dfrank.instrumentation.logContext=false
-
 ## Parameter events
 If true, whenever a parameter value is resolved, an event will be added to the current span.
 ![frank-otel-instrumentation-parameter-option-example](docs/img/zipkin-param-event.png)
 
 ### Property
 - frank.instrumentation.parameters=`true|false` 
-- default: `false`
+- default: `true`
 
 ### Example Usage
-To enable this feature, add the following JVM property:
-- -Dfrank.instrumentation.parameters=true
+To disable this feature, add the following JVM property:
+- -Dfrank.instrumentation.parameters=false
 
 ## Pipe spans
 If true, whenever a pipe is called, a new span is created.

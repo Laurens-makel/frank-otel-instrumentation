@@ -36,10 +36,7 @@ public class FrankSingletons {
     /* EXITS */
     public static final String FRANK_EXIT_STATE_KEY = "frank.exit.state";
     public static final String FRANK_EXIT_CODE_KEY = "frank.exit.code";
-
     public static boolean TAG_EXITS = getBooleanProperty("frank.instrumentation.exits", "true");
-    public static boolean TAG_LOG_CONTEXT = getBooleanProperty("frank.instrumentation.logContext", "true");
-    public static boolean PARAMETER_EVENTS = getBooleanProperty("frank.instrumentation.parameters", "false");
 
     /* FORWARDS */
     public static final String FRANK_FORWARD_NAME_KEY = "frank.forward.name";

@@ -13,11 +13,8 @@ import nl.nn.adapterframework.core.PipeLine;
 import nl.nn.adapterframework.core.PipeLineResult;
 import nl.nn.adapterframework.core.PipeLineSession;
 import nl.nn.adapterframework.stream.Message;
-import org.apache.logging.log4j.ThreadContext;
 import org.example.common.FrankRequest;
 import org.example.common.FrankSingletons;
-
-import java.util.Map;
 
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
@@ -86,17 +83,11 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
                 return;
             }
 
-            Span span = Span.current();
             if(TAG_EXITS){
-                span.setAttribute(FRANK_EXIT_STATE_KEY, result.getState().name());
+                Span current = Span.current();
+                current.setAttribute(FRANK_EXIT_STATE_KEY, result.getState().name());
                 if(result.getExitCode()>0){
-                    span.setAttribute(FRANK_EXIT_CODE_KEY, result.getExitCode());
-                }
-            }
-
-            if(TAG_LOG_CONTEXT){
-                for (Map.Entry<String, String> entry : ThreadContext.getContext().entrySet()) {
-                    span.setAttribute(entry.getKey(), entry.getValue());
+                    current.setAttribute(FRANK_EXIT_CODE_KEY, result.getExitCode());
                 }
             }
 
