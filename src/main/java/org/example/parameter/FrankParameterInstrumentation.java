@@ -56,9 +56,11 @@ public class FrankParameterInstrumentation implements TypeInstrumentation {
                 @Advice.Local("otelContext") Context context,
                 @Advice.Local("otelScope") Scope scope) {
             if(PARAMETER_EVENTS){
-                Span.current().setAttribute(parameter.getName(), result.toString());
+                String name = parameter.getName();
+                String value = parameter.isHidden() ? "****" : parameter.getValue();
+                Span.current().setAttribute(name, value);
                 Span.current().addEvent("Parameter Resolved", Attributes.builder()
-                        .put(parameter.getName(), result.toString())
+                        .put(name, value)
                         .build());
             }
 
