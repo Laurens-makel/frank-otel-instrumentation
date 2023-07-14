@@ -87,11 +87,11 @@ If true, whenever a parameter value is resolved, an event will be added to the c
 
 ### Property
 - frank.instrumentation.parameters=`true|false` 
-- default: `false`
+- default: `true`
 
 ### Example Usage
-To enable this feature, add the following JVM property:
-- -Dfrank.instrumentation.parameters=true
+To disable this feature, add the following JVM property:
+- -Dfrank.instrumentation.parameters=false
 
 ## Pipe spans
 If true, whenever a pipe is called, a new span is created.
