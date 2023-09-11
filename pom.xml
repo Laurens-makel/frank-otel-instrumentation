@@ -24,7 +24,7 @@
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-semconv</artifactId>
-            <version>1.28.0-alpha</version>
+            <version>1.30.0-alpha</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
