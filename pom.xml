@@ -30,7 +30,7 @@
         <dependency>
             <groupId>org.ibissource</groupId>
             <artifactId>ibis-adapterframework-core</artifactId>
-            <version>7.8</version>
+            <version>7.8.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
