@@ -36,7 +36,7 @@
         <dependency>
             <groupId>io.opentelemetry.javaagent</groupId>
             <artifactId>opentelemetry-javaagent-extension-api</artifactId>
-            <version>1.28.0-alpha</version>
+            <version>1.29.0-alpha</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
