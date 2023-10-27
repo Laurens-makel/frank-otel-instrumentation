@@ -7,7 +7,7 @@ Provides configurable instrumentation modules for the [OpenTelemetry Agent](http
 The OpenTelemetry Agent instruments a lot of libraries and frameworks by default, this project aims to provide a production grade 'plug & play' module which helps to gain additional insights on the path a message took within a Frank application.
 
 ## Side Note
-This project is still under heavy development and the master is based on the 7.8 release of the Frank Framework. The highest priority is to provide correct traces at first, then look into supporting features of newer versions of the framework.
+This project is still under heavy development and the master is based on the 7.8.3 release of the Frank Framework. The highest priority is to provide correct traces at first, then look into supporting features of newer versions of the framework.
 
 Other supported version (see branches):
 - 7.7.X releases
