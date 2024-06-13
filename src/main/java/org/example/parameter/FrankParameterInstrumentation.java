@@ -19,6 +19,7 @@ import org.example.common.FrankSingletons.FrankClasses;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 import static net.bytebuddy.matcher.ElementMatchers.takesArgument;
 import static org.example.common.FrankSingletons.PARAMETER_EVENTS;
+import static org.example.common.FrankSingletons.setSpanStringValue;
 
 public class FrankParameterInstrumentation implements TypeInstrumentation {
 
@@ -58,8 +59,10 @@ public class FrankParameterInstrumentation implements TypeInstrumentation {
             if(PARAMETER_EVENTS){
                 String name = parameter.getName();
                 String value = parameter.isHidden() ? "****" : parameter.getValue();
-                Span.current().setAttribute(name, value);
-                Span.current().addEvent("Parameter Resolved", Attributes.builder()
+
+                Span span = Span.current();
+                setSpanStringValue(span, name, value);
+                span.addEvent("Parameter Resolved", Attributes.builder()
                         .put(name, value)
                         .build());
             }

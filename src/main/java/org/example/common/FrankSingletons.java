@@ -1,6 +1,7 @@
 package org.example.common;
 
 import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.instrumentation.api.instrumenter.Instrumenter;
 import io.opentelemetry.instrumentation.api.instrumenter.InstrumenterBuilder;
 import nl.nn.adapterframework.core.INamedObject;
@@ -97,5 +98,13 @@ public class FrankSingletons {
     }
     private static Instrumenter<FrankRequest, INamedObject> buildClientInstrumenter(String instrumentationName, boolean instrumentationEnabled){
         return base(instrumentationName, instrumentationEnabled).buildClientInstrumenter(FrankRequest::setPropagationSessionKeys);
+    }
+
+    public static void setSpanStringValue(Span span, String key, String value){
+        if(value.matches("\\d*")){
+            span.setAttribute(key, Long.parseLong(value));
+        } else {
+            span.setAttribute(key, value);
+        }
     }
 }

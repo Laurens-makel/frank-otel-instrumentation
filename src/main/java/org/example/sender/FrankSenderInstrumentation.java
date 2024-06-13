@@ -39,8 +39,8 @@ public class FrankSenderInstrumentation implements TypeInstrumentation {
     public static class SenderExecutionAdvice {
         @Advice.OnMethodEnter(suppress = Throwable.class)
         public static void methodEnter(
-                @Advice.Argument(1) PipeLineSession session,
                 @Advice.Argument(0) Message message,
+                @Advice.Argument(1) PipeLineSession session,
                 @Advice.This ISender sender,
                 @Advice.Local("otelRequest") FrankRequest<ISender> frankRequest,
                 @Advice.Local("otelContext") Context context,
@@ -58,9 +58,9 @@ public class FrankSenderInstrumentation implements TypeInstrumentation {
 
         @Advice.OnMethodExit(onThrowable = Throwable.class, suppress = Throwable.class)
         public static void methodExit(
-                @Advice.Argument(1) PipeLineSession session,
                 @Advice.Argument(0) Message message,
-                @Advice.Return Message result,
+                @Advice.Argument(1) PipeLineSession session,
+                @Advice.Return SenderResult result,
                 @Advice.Thrown Throwable throwable,
                 @Advice.Local("otelRequest") FrankRequest<ISender> frankRequest,
                 @Advice.Local("otelContext") Context context,

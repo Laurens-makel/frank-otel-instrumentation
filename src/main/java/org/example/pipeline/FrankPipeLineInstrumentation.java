@@ -96,7 +96,7 @@ public class FrankPipeLineInstrumentation implements TypeInstrumentation {
 
             if(TAG_LOG_CONTEXT){
                 for (Map.Entry<String, String> entry : ThreadContext.getContext().entrySet()) {
-                    span.setAttribute(entry.getKey(), entry.getValue());
+                    setSpanStringValue(span, entry.getKey(), entry.getValue());
                 }
             }
 
